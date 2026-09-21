@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Application Status — Indian Visa Appointment Service</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="brand">🇮🇳 IVAS <small>Indian Visa Appointment Service</small></div>
+    <div><a href="/">← Home / নতুন Application</a></div>
+  </div>
+</nav>
+
+<section class="section" style="padding-top:36px">
+  <h2>Application Status চেক করুন</h2>
+  <p class="sub">আপনার Application ID ও যে mobile number দিয়ে application দিয়েছিলেন দিন।</p>
+  <div class="form-card" style="max-width:640px">
+    <div class="grid2">
+      <div class="field"><label>Application ID <span class="req">*</span></label><input id="cRef" placeholder="IVB-2026-0001"></div>
+      <div class="field"><label>Mobile Number <span class="req">*</span></label><input id="cMobile" placeholder="01XXXXXXXXX"></div>
+    </div>
+    <div style="margin-top:16px"><button class="btn btn-primary" onclick="check()">Status দেখুন</button></div>
+    <div id="checkErrors" style="margin-top:12px"></div>
+  </div>
+
+  <div class="form-card status-result" id="result" style="max-width:860px;margin-top:22px" hidden>
+    <div id="resultBody"></div>
+  </div>
+</section>
+
+<footer>
+  <p>Booking-এর সময় OTP দরকার হলে আমরা আপনার mobile-এ (যেটা application-এ দিয়েছেন) যোগাযোগ করব।</p>
+</footer>
+
+<script src="/status.js"></script>
+</body>
+</html>

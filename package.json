@@ -1,0 +1,19 @@
+{
+  "name": "indian-visa-booking-system",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Customer portal + admin panel for Indian visa appointment booking service (bKash payment, documents, receipts)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cookie-parser": "^1.4.7",
+    "express": "^4.21.2",
+    "multer": "^2.0.2",
+    "pdfkit": "^0.17.1",
+    "pg": "^8.16.0"
+  }
+}

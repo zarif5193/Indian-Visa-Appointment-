@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="bn">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Indian Visa Appointment Service — India Visa Slot Booking</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <div class="brand">🇮🇳 IVAS <small>Indian Visa Appointment Service</small></div>
+    <div>
+      <a href="/status">Application Status</a>
+      <a href="#apply" class="btn btn-primary btn-sm" style="margin-left:18px" onclick="startApply(event)">Apply Now</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div>
+      <h1>Indian Visa Appointment — <span>সহজে, নিরাপদে, অনলাইনে</span></h1>
+      <p>একবার তথ্য ও ডকুমেন্ট দিলেই কাজ শেষ। Application, payment verification, appointment booking — সব process আমাদের system-এর মাধ্যমে। আপনার মোবাইল সংযোগ রাখুন যথেষ্ট, booking-এর সময় OTP শুধু একবার দরকার হবে।</p>
+      <button class="btn btn-primary" style="background:#fff;color:var(--primary)" onclick="startApply(event)">Application শুরু করুন →</button>
+      <a class="btn btn-ghost" href="/status" style="margin-left:8px">Application Status চেক করুন</a>
+    </div>
+    <div class="hero-card">
+      <h3>কেন আমাদের service?</h3>
+      <ul>
+        <li>✓ একবার application দিলে বারবার কাজ করতে হবে না</li>
+        <li>✓ bKash-এ সরাসরি payment, TrxID দিয়ে verification</li>
+        <li>✓ Appointment receipt PDF — booking-এর সাথে সাথে</li>
+        <li>✓ Center select করুন: Dhaka, Chattogram, Rajshahi, Sylhet, Khulna</li>
+        <li>✓ Application status real-time চেক করা যায়</li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<section class="section">
+  <h2>কিভাবে কাজ করে?</h2>
+  <p class="sub">চারটা সহজ ধাপ — আপনার মোবাইল থেকেই</p>
+  <div class="steps-grid">
+    <div class="step-card"><div class="num">1</div><h3>তথ্য দিন &amp; ডকুমেন্ট আপলোড</h3><p>Personal, passport, visa তথ্য, ছবি ও passport scan দিন। Center ও preferred date select করুন।</p></div>
+    <div class="step-card"><div class="num">2</div><h3>bKash-এ payment</h3><p>Service charge + appointment fee আমাদের bKash নম্বরে Send Money করুন, Transaction ID submit করুন।</p></div>
+    <div class="step-card"><div class="num">3</div><h3>Verification</h3><p>আমরা payment ও ডকুমেন্ট verify করি। কোনো সংশোধন লাগলে website-তেই জানাব — আপনার জন্য correction form থাকবে।</p></div>
+    <div class="step-card"><div class="num">4</div><h3>Booking &amp; Receipt</h3><p>Appointment booking হয়ে গেলে receipt PDF আপনি status page থেকে নিতে পারবেন।</p></div>
+  </div>
+</section>
+
+<section class="section" id="apply" style="padding-top:10px">
+  <div class="form-card" id="wizardCard" hidden>
+    <div class="progress" id="progress"></div>
+    <div id="wizBody"></div>
+  </div>
+  <div class="form-card" id="closedCard" hidden>
+    <div class="notice">দুঃখিত, এই মুহূর্তে নতুন application accept করা হচ্ছে না। কিছু দিন পর আবার চেষ্টা করুন।</div>
+  </div>
+</section>
+
+<section class="section" style="padding-top:0">
+  <div class="form-card success-card" id="successCard" hidden>
+    <div class="big">✅</div>
+    <h2>Application submitted!</h2>
+    <p>আপনার application ID নিচের মতো — এটা ভালোভাবে সংরক্ষণ করুন।</p>
+    <div class="copy-row" style="justify-content:center"><span class="app-ref" id="successRef"></span><button class="btn btn-outline btn-sm" onclick="copyRef()">Copy</button></div>
+    <div class="next-steps">
+      <b>এখন যা করবেন:</b>
+      <ol>
+        <li>আমাদের bKash নম্বরে <b id="successTotal"></b> Send Money করুন।</li>
+        <li>Payment-এর পর <b>Application Status</b> পেজে গিয়ে Transaction ID submit করুন*।</li>
+        <li>Mobile number সচল রাখুন — booking-এর সময় OTP দরকার হতে পারে।</li>
+      </ol>
+      <p style="font-size:12px;color:var(--muted);margin-top:8px">* Transaction ID application form-এর payment ধাপে দিলেই যথেষ্ট। Status page দিয়ে পরেও সংশোধন করা যাবে।</p>
+    </div>
+    <a href="/status" class="btn btn-primary">Status পেজে যান</a>
+    <button class="btn btn-outline" style="margin-left:8px" onclick="resetWizard()">নতুন application</button>
+  </div>
+</section>
+
+<footer>
+  <p><b id="footName">Indian Visa Appointment Service</b> — booking service only. Indian visa-র official application, fee ও eligibility সম্পর্কিত শেষ সিদ্ধান্ত ভারতের High Commission / IVAC-এর।</p>
+  <p style="margin-top:6px">আমরা official website-এর Terms of Service মেনে, human-assisted booking service দিই। • <a href="/status">Status</a> • <a href="/admin">Admin</a></p>
+</footer>
+
+<script src="/apply.js"></script>
+</body>
+</html>
