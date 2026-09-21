@@ -1,9 +1,9 @@
 /* ============================================================
-   Indian Visa Appointment Booking System
-   Customer portal + Admin panel + bKash payment verification
-   + automatic PDF receipt generation + booking workflow
-   Database: PostgreSQL (Neon) — all tables auto-created on start
-   ============================================================ */
+    Indian Visa Appointment Booking System
+    Customer portal + Admin panel + bKash payment verification
+    + automatic PDF receipt generation + booking workflow
+    Database: PostgreSQL (Neon) — all tables auto-created on start
+    ============================================================ */
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
@@ -20,14 +20,30 @@ try {
   if (fs.existsSync(_envFile)) {
     for (const _line of fs.readFileSync(_envFile, 'utf8').split('\n')) {
       const _m = _line.match(/^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)\s*$/);
-      if (_m && !process.env[_m[1]]) process.env[_m[1]] = _m[2].trim().replace(/^["']|["']$/g, '');
+      if (_m && !process.env[_m[1]]) process.env[_m[1]] = _m[2].trim().replace(/^['"]|['"]$/g, '');
     }
   }
 } catch (e) {}
 
 const PORT = process.env.PORT || 3000;
 const ROOT = __dirname;
-const DATA = path.join(ROOT, 'data');
+
+function resolveStorageRoot() {
+  if (process.env.STORAGE_ROOT) return process.env.STORAGE_ROOT;
+
+  const writableTmp = (() => {
+    try {
+      fs.accessSync('/tmp', fs.constants.W_OK);
+      return true;
+    } catch {
+      return false;
+    }
+  })();
+
+  return writableTmp ? '/tmp/indian-visa-data' : path.join(ROOT, 'data');
+}
+
+const DATA = resolveStorageRoot();
 const UPLOADS = path.join(DATA, 'uploads');
 const RECEIPTS = path.join(DATA, 'receipts');
 [DATA, UPLOADS, RECEIPTS].forEach(d => fs.mkdirSync(d, { recursive: true }));
@@ -363,7 +379,7 @@ app.get('/api/admin/dashboard', adminAuth, ah(async (req, res) => {
   STATUSES.forEach(s => counts[s] = 0);
   for (const r of (await q('SELECT status, COUNT(*) AS c FROM applications GROUP BY status')).rows) counts[r.status] = Number(r.c);
   const total = Object.values(counts).reduce((a, b) => a + b, 0);
-  const needsAction = (await q("SELECT id,full_name,visa_center,visa_type,mobile,created_at FROM applications WHERE status IN ('submitted','approved','slot_found','booking_failed','payment_rejected') ORDER BY created_at DESC LIMIT 15")).rows;
+  const needsAction = (await q("SELECT id,full_name,visa_center,visa_type,mobile,created_at FROM applications WHERE status IN ('submitted','approved','slot_found','booking_failed','payment_rejected','correction_needed') ORDER BY created_at DESC LIMIT 12")).rows;
   const recent = (await q('SELECT id,full_name,visa_center,visa_type,status,created_at FROM applications ORDER BY created_at DESC LIMIT 8')).rows;
   res.json({ counts, total, needsAction, recent });
 }));
@@ -545,7 +561,7 @@ ol li{font-size:13.5px;margin-bottom:5px}
 <li>Download/screenshot the confirmation. Note the Booking ID, appointment date &amp; time.</li>
 <li>Return to Admin Panel → <b>Mark Booked</b> with Booking ID + date/time. Receipt PDF is generated automatically.</li>
 </ol>
-<div class="box">⚠️ Do not share customer credentials beyond this booking. Keep OTP logs minimal. Follow the official site's Terms of Service — booking is completed by a human operator, not a bot.</div>
+<div class="box">⚠️ Do not share customer credentials beyond this booking. Keep OTP logs minimal. Follow the official site's Terms of Service — booking is completed by a human operator, not by automation.</div>
 <button class="noprint" onclick="window.print()" style="margin-top:18px;padding:10px 22px;font-size:14px;cursor:pointer;border:0;border-radius:8px;background:#1e3a8a;color:#fff">🖨️ Print / Save PDF</button>
 </body></html>`);
 }));
@@ -661,7 +677,11 @@ app.use((err, req, res, next) => {
   if (!adminRow) {
     const pw = 'Admin-' + crypto.randomInt(100000, 999999);
     await setSet('admin_password_hash', bcrypt.hashSync(pw, 10));
-    fs.writeFileSync(path.join(DATA, '.admin_password.txt'), pw + '\n', { mode: 0o600 });
+    try {
+      fs.writeFileSync(path.join(DATA, '.admin_password.txt'), pw + '\n', { mode: 0o600 });
+    } catch (err) {
+      console.warn('Could not save admin password file:', err.message);
+    }
     console.log('\n*** FIRST RUN — initial admin password: ' + pw + '  (saved in data/.admin_password.txt) ***\n');
   }
   app.listen(PORT, '0.0.0.0', () => {
